@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EcommerceKotlin</string>
+    <string name="rightadress">The Right Adress \n Shopping\n Any day</string>
+    <string name="quality">"It is now wery easy to reach the\n best quality among the\n product on the internet. "</string>
 </resources>

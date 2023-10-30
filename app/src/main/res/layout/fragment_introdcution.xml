@@ -20,7 +20,59 @@
         android:id="@+id/ellipse"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf=""
+        android:src="@drawable/ellips"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineEllipsBottom"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEllipsRight"
+        app:layout_constraintStart_toStartOf="@id/guidelineEllipsLeft"
+        app:layout_constraintTop_toTopOf="@+id/guidelineEllipsTop"
+        tools:ignore="ContentDescription" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/texture_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidlineLeftTecture" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/blueButtonStyle"
+        android:layout_width="@dimen/smallButtonWidth"
+        android:layout_height="@dimen/smallButtonHeight"
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEllipsRight"
+        app:layout_constraintStart_toEndOf="@+id/guidelineEllipsLeft"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuality" />
+
+
+    <TextView
+        android:id="@+id/tvRightAdressForShopping"
+        style="@style/h4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/tvRightAdressMargin"
+        android:gravity="center"
+        android:text="@string/rightadress"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/ellipse"
+        app:layout_constraintEnd_toEndOf="@id/ellipse"
+        app:layout_constraintStart_toStartOf="@+id/ellipse"
+        app:layout_constraintTop_toTopOf="@+id/guidlineLeftTecture" />
+
+    <TextView
+        android:id="@+id/tvQuality"
+        style="@style/h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/quality"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/tvRightAdressForShopping"
+        app:layout_constraintStart_toStartOf="@id/tvRightAdressForShopping"
+        app:layout_constraintTop_toBottomOf="@+id/tvRightAdressForShopping" />
 
 
     <androidx.constraintlayout.widget.Guideline
