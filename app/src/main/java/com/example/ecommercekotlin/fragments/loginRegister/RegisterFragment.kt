@@ -1,6 +1,6 @@
 package com.example.ecommercekotlin.fragments.loginRegister
 
- import android.os.Bundle
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import com.example.ecommercekotlin.R
 import com.example.ecommercekotlin.data.User
 import com.example.ecommercekotlin.databinding.FragmentRegisterBinding
+import com.example.ecommercekotlin.utils.RegisterValidation
 import com.example.ecommercekotlin.utils.Resource
+import com.example.ecommercekotlin.utils.validateEmail
 import com.example.ecommercekotlin.viewmodel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
- import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
-private val TAG= "RegisterFragment"
+private val TAG = "RegisterFragment"
+
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -33,7 +38,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding = FragmentRegisterBinding.inflate(inflater)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,10 +57,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenStarted {
             viewModel.register.collect {
-
-
 
                 when (it) {
                     is Resource.Loading -> {
@@ -72,8 +74,31 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         Log.d(TAG, it.data.toString())
                         binding.buttonRegisterRegister.revertAnimation()
 
-                    } else -> Unit
+                    }
 
+                    else -> Unit
+
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.validation.collect { validation ->
+                if (validation.email is RegisterValidation.Failed) {
+                    withContext(Dispatchers.Main) {
+                        binding.editTextEmailRegister.apply {
+                            requestFocus()
+                            error = validation.email.message
+                        }
+                    }
+                }
+                if(validation.password is RegisterValidation.Failed ){
+                    withContext(Dispatchers.Main){
+                        binding.editTextPasswordRegister.apply {
+                            requestFocus()
+                            error=validation.password.message
+                        }
+                    }
                 }
             }
         }
