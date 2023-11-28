@@ -9,12 +9,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.ecommercekotlin.R
 import com.example.ecommercekotlin.activities.ShoppingActivity
 import com.example.ecommercekotlin.databinding.FragmentLoginBinding
 import com.example.ecommercekotlin.databinding.FragmentRegisterBinding
+import com.example.ecommercekotlin.dialog.setupBottomSheetDialog
 import com.example.ecommercekotlin.utils.Resource
+import com.example.ecommercekotlin.utils.validateEmail
 import com.example.ecommercekotlin.viewmodel.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -38,6 +42,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvDontHaveAccount.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
+
+
         binding.apply {
 
             binding.buttonLoginLogin.setOnClickListener {
@@ -47,6 +57,42 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                 viewModel.login(email, password)
 
+            }
+        }
+
+
+        binding.tvForgotPasswordLogin.setOnClickListener {
+            setupBottomSheetDialog { email ->
+                viewModel.resetPassword(email)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.resetPassword.collect {
+                when (it) {
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        Snackbar.make(
+                            requireView(),
+                            "Reset link was sent to your email",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
+                    is Resource.Error -> {
+                        Snackbar.make(
+                            requireView(),
+                            "Dont send email your addrss!!",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+
+                    }
+
+                    else -> Unit
+
+                }
             }
         }
 
