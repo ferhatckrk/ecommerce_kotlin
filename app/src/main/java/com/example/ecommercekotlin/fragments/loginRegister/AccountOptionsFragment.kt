@@ -34,7 +34,7 @@ class AccountOptionsFragment : Fragment(R.layout.fragment_account_options) {
         }
 
         binding.buttonLoginAccountOptions.setOnClickListener {
-            findNavController().navigate((R.id.action_accountOptionsFragment_to_loginFragment))
+            findNavController().navigate  ((R.id.action_accountOptionsFragment_to_loginFragment))
         }
 
 
