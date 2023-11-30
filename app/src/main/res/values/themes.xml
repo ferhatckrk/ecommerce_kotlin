@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.EcommerceKotlin" parent="Base.Theme.EcommerceKotlin" />
+
+
+
 </resources>
