@@ -20,7 +20,6 @@ class SpecialProductsAdapter :
                     tvSpecialProductName.text=product.name
                     tvSpecialProductPrice.text=product.price.toString()
 
-
                 }
         }
     }
@@ -28,11 +27,11 @@ class SpecialProductsAdapter :
     private val diffCallBack = object : DiffUtil.ItemCallback<Product>() {
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem  == newItem
         }
 
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
     }
@@ -55,7 +54,7 @@ class SpecialProductsAdapter :
     }
 
     override fun onBindViewHolder(holder: SpecialProductsViewHolder, position: Int) {
-        val product = differ.currentList[position]
+        val product  = differ.currentList[position]
         holder.bind(product)
     }
 

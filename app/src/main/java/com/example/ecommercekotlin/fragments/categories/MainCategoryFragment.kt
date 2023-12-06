@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ecommercekotlin.R
+import com.example.ecommercekotlin.adapters.BestDealsAdapter
+import com.example.ecommercekotlin.adapters.BestProductAdapter
 import com.example.ecommercekotlin.adapters.SpecialProductsAdapter
 import com.example.ecommercekotlin.databinding.FragmentMainCategoryBinding
 import com.example.ecommercekotlin.utils.Resource
@@ -22,17 +25,18 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
- class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
+class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
 
 
     private lateinit var binding: FragmentMainCategoryBinding
     private lateinit var specialProductsAdapter: SpecialProductsAdapter
-    private val viewModel by viewModels<MainCategoryViewModel>()
+    private lateinit var bestDealsAdapter: BestDealsAdapter
+    private lateinit var bestProductsAdapter: BestProductAdapter
 
+
+    private val viewModel by viewModels<MainCategoryViewModel>()
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainCategoryBinding.inflate(inflater)
         return binding.root
@@ -44,6 +48,13 @@ import kotlinx.coroutines.launch
 
 
         setupSpecialProductsRv()
+        setupBestDealsRv()
+        setupBestProductsRv()
+
+
+
+
+
         lifecycleScope.launch {
             viewModel.specialProducts.collectLatest {
                 when (it) {
@@ -63,7 +74,54 @@ import kotlinx.coroutines.launch
                             .show()
                     }
 
-                    else -> {}
+                    else -> Unit
+                }
+
+            }
+
+
+
+            viewModel.bestDealsProducts.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+
+                    is Resource.Success -> {
+                        bestDealsAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e(TAG, it.message.toString())
+                        Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                    else -> Unit
+                }
+
+            }
+            viewModel.bestProducts.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+
+                    is Resource.Success -> {
+                        bestProductsAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e(TAG, it.message.toString())
+                        Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                    else -> Unit
                 }
 
             }
@@ -71,12 +129,23 @@ import kotlinx.coroutines.launch
 
     }
 
-    private fun hideLoading() {
-        binding.mainCategoryProgressBar.visibility = View.GONE
+    private fun setupBestProductsRv() {
+        bestProductsAdapter = BestProductAdapter()
+        binding.rvBestProducts.apply {
+            layoutManager =
+                GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+            adapter = bestProductsAdapter
+        }
     }
 
-    private fun showLoading() {
-        binding.mainCategoryProgressBar.visibility = View.VISIBLE
+    private fun setupBestDealsRv() {
+        bestDealsAdapter = BestDealsAdapter()
+        binding.rvBestDealsProducts.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = bestDealsAdapter
+        }
+
     }
 
     private fun setupSpecialProductsRv() {
@@ -85,10 +154,15 @@ import kotlinx.coroutines.launch
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = specialProductsAdapter
-
         }
+    }
 
+    private fun hideLoading() {
+        binding.mainCategoryProgressBar.visibility = View.GONE
+    }
 
+    private fun showLoading() {
+        binding.mainCategoryProgressBar.visibility = View.VISIBLE
     }
 
 
