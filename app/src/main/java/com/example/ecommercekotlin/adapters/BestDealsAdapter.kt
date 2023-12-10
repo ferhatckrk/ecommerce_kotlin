@@ -1,7 +1,6 @@
 package com.example.ecommercekotlin.adapters
-
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -13,7 +12,7 @@ import com.example.ecommercekotlin.databinding.BestDealsRvItemBinding
 class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHolder>() {
 
 
-    inner class BestDealsViewHolder(private val binding: BestDealsRvItemBinding) :
+    inner class BestDealsViewHolder( private val binding: BestDealsRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
@@ -50,7 +49,7 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealsViewHold
     val differ = AsyncListDiffer(this, diffCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestDealsViewHolder {
         return BestDealsViewHolder(
-            BestDealsRvItemBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+            BestDealsRvItemBinding.inflate(LayoutInflater.from(parent.context),)
         )
     }
 

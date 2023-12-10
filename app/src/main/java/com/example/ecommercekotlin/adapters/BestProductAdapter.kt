@@ -1,42 +1,34 @@
 package com.example.ecommercekotlin.adapters
-
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.ecommercekotlin.data.Product
-import com.example.ecommercekotlin.databinding.BestDealsRvItemBinding
 import com.example.ecommercekotlin.databinding.ProductRvItemBinding
-
 class BestProductAdapter : RecyclerView.Adapter<BestProductAdapter.BestProductViewHolder>() {
-
 
     inner class BestProductViewHolder(private val binding: ProductRvItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
-
             binding.apply {
-                Glide.with(itemView).load(product.images[0]).into(imgProduct)
+                Glide.with(itemView.context).load(product.images[0]).into(imgProduct)
 
                 product.offerPercentage?.let {
                     val remainingPricePercentage = 1f - it
                     val priceAfterOffer = remainingPricePercentage * product.price
                     tvNewPrice.text = "$ ${String.format("%.2f", priceAfterOffer)}"
                 }
+
                 if (product.offerPercentage == null) tvNewPrice.visibility = View.INVISIBLE
                 tvPrice.text = "$ ${product.price}"
                 tvName.text = product.name
-
             }
         }
     }
-
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
@@ -45,12 +37,11 @@ class BestProductAdapter : RecyclerView.Adapter<BestProductAdapter.BestProductVi
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
-
         }
-
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestProductViewHolder {
         return BestProductViewHolder(
             ProductRvItemBinding.inflate(
@@ -59,7 +50,6 @@ class BestProductAdapter : RecyclerView.Adapter<BestProductAdapter.BestProductVi
                 false
             )
         )
-
     }
 
     override fun getItemCount(): Int {
@@ -69,7 +59,5 @@ class BestProductAdapter : RecyclerView.Adapter<BestProductAdapter.BestProductVi
     override fun onBindViewHolder(holder: BestProductViewHolder, position: Int) {
         val product = differ.currentList[position]
         holder.bind(product)
-
     }
-
 }

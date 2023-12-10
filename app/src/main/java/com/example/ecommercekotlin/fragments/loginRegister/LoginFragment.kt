@@ -107,7 +107,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     is Resource.Success -> {
                         binding.buttonLoginLogin.revertAnimation()
                         Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
-
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         }
