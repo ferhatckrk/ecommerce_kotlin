@@ -35,7 +35,6 @@ class MainCategoryViewModel @Inject constructor(
     init {
         fetchBestDeals()
         fetchSpecialProducts()
-
         fetchBestProducts()
     }
 
